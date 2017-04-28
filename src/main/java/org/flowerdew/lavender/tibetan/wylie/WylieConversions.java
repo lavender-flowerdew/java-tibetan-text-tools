@@ -23,42 +23,53 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 public class WylieConversions {
-  public static Map<String,String> DEFAULT_LIGATURES = mappings("ligatures");
-  public static Map<String,String> DEFAULT_PUNCTUATION = mappings("punctuation");
-  public static Map<String,String> DEFAULT_CHARACTERS = mappings("characters");
-
-  private WylieConversions() {}
+  public static Map<String,String> DEFAULT_LIGATURES = Collections.unmodifiableMap(mappings("ligatures"));
+  public static Map<String,String> DEFAULT_PUNCTUATION = Collections.unmodifiableMap(mappings("punctuation"));
+  public static Map<String,String> DEFAULT_CHARACTERS = Collections.unmodifiableMap(mappings("characters"));
 
   public static String toUchen(final String extWylie) {
     final List<Map<String,String>> defaultMappings = new ArrayList<Map<String,String>>();
     Collections.addAll(defaultMappings, DEFAULT_LIGATURES, DEFAULT_PUNCTUATION, DEFAULT_CHARACTERS);
 
-    final String uchen = process(defaultMappings, extWylie);
-
-    return uchen;
+    return process(defaultMappings, extWylie);
   }
 
   private static String process(final List<Map<String,String>> mappings, final String wylie) {
-    String result = wylie;
-    for (Map<String,String> map : mappings) {
-      result = process(map, result);
+    StringBuffer uchen = new StringBuffer(wylie);
+
+    for (Map<String,String> m : mappings) {
+      uchen = process(m, uchen);
     }
-    return result;
+
+    return uchen.toString();
   }
 
-  private static String process(final Map<String,String> mappings, final String wylie) {
-    String result = wylie;
-    // slow method will change to matcher and stringbuffer
-    String[] keys = mappings.keySet().toArray(new String[0]);
+  private static StringBuffer process(final Map<String,String> mappings, final StringBuffer wylie) {
+    final String[] keys = mappings.keySet().toArray(new String[0]);
     Arrays.sort(keys,getLengthComparator());
-    for (String key : keys) {
-      String regex = key.replaceAll("([-\\[\\]{}()*+?.,^$|#\\s])", "\\\\$1");
-      String replacement = mappings.get(key);
-      //System.out.println(regex + "    " + replacement);
-      result = result.replaceAll(regex, replacement);
-    }
 
-    return result;
+    final StringBuffer regexBuffer = new StringBuffer();
+    regexBuffer.append("(");
+    for (String str : keys) {
+      regexBuffer.append(str.replaceAll("([-\\[\\]{}()*+?.,^$|#\\s])", "\\\\$1"));
+      regexBuffer.append("|");
+    }
+    regexBuffer.deleteCharAt(regexBuffer.length()-1);
+    regexBuffer.append(")");
+
+    final StringBuffer uchen = new StringBuffer();
+    final Matcher matcher = Pattern.compile(regexBuffer.toString()).matcher(wylie.toString());
+    while (matcher.find()) {
+      String group = matcher.toMatchResult().group();
+      String replacement = "*";
+      if (null != mappings.get(group)) {
+        replacement = mappings.get(group);
+      }
+      matcher.appendReplacement(uchen, replacement);
+    }
+    matcher.appendTail(uchen);
+
+    return uchen;
   }
 
   private static Map<String,String> mappings(final String name) {

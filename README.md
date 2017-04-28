@@ -9,4 +9,4 @@ Perhaps misnamed for now but hope to collect a set of useful methods for working
 
 - [x] Fix mappings in WYLIE
 - [x] Add tests
-- [ ] Convert to pattern matcher rather than blind loops
+- [x] Convert to pattern matcher rather than blind loops
