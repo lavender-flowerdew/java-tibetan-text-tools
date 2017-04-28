@@ -1,0 +1,12 @@
+language: scala
+scala:
+  - 2.12.1
+
+script: "sbt clean jacoco:cover"
+after_success: "mvn -DjacocoReports=./target/scala-2.12/jacoco/jacoco.xml coveralls:report"
+
+jdk:
+  - oraclejdk8
+notifications:
+  email:
+    - lavender.flowerdew@gmail.com
