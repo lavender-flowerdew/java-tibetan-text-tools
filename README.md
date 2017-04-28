@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/lavender-flowerdew/java-tibetan-text-tools.svgended-?branch=master)](https://travis-ci.org/lavender-flowerdew/java-tibetan-text-tools)
-[![Coverage Status](https://coveralls.io/repos/github/lavender-flowerdew/java-tibetan-text-toolse/badge.svg?branch=master)](https://coveralls.io/github/lavender-flowerdew/java-tibetan-text-tools?branch=master)
+[![Build Status](https://travis-ci.org/lavender-flowerdew/java-tibetan-text-tools.svg?branch=master)](https://travis-ci.org/lavender-flowerdew/java-tibetan-text-tools)
+[![Coverage Status](https://coveralls.io/repos/github/lavender-flowerdew/java-tibetan-text-tools/badge.svg?branch=master)](https://coveralls.io/github/lavender-flowerdew/java-tibetan-text-tools?branch=master)
 
 # Java Tibetan Text Tools
 
